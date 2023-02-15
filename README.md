@@ -1,5 +1,5 @@
 # social-stream-theming-template
-Use to create template chat for social-stream obs library using reactjs
+Use to create template chat for [social-stream](https://github.com/steveseguin/social_stream) obs library using reactjs
 
 how to use
 
