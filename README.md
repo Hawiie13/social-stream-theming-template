@@ -1,4 +1,5 @@
 # social-stream-theming-template
+
 Use to create template chat for [social-stream](https://github.com/steveseguin/social_stream) obs library using reactjs
 
 how to use
@@ -8,17 +9,9 @@ npm install
 npm start
 
 create/edit your theme on demo.tsx
-To Test 
+To Test
 
-uncomment this code on index.ts
-
-```// comment-out to test your theme
-// const App = () => {
-//   return data.map((i) => processData(i));
-// };
-
-// App();
-```
+add `?test` on the url
 
 when done coment again the code above
 the run

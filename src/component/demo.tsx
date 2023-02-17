@@ -1,7 +1,13 @@
 import { Avatar, Row, Col, Typography } from "antd";
 import React from "react";
 import { createFromIconfontCN } from "@ant-design/icons";
-import { FACEBOOK, ICON_FONT_CN_LINK, TWITCH, DEFAULT } from "../enum";
+import {
+  FACEBOOK,
+  ICON_FONT_CN_LINK,
+  TWITCH,
+  DEFAULT,
+  TEXT_SHADOW,
+} from "../enum";
 const { Text } = Typography;
 
 const IconFont = createFromIconfontCN({
@@ -62,9 +68,6 @@ const ChatBadges: any = ({ chatBadges }: IChatBadges) => {
   ));
 };
 
-const textShadow =
-  "-2px -2px #000000, -2px -1px #000000, -2px 0px #000000, -2px 1px #000000, -2px 2px #000000, -1px -2px #000000, -1px -1px #000000, -1px 0px #000000, -1px 1px #000000, -1px 2px #000000, 0px -2px #000000, 0px -1px #000000, 0px 0px #000000, 0px 1px #000000, 0px 2px #000000, 1px -2px #000000, 1px -1px #000000, 1px 0px #000000, 1px 1px #000000, 1px 2px #000000, 2px -2px #000000, 2px -1px #000000, 2px 0px #000000, 2px 1px #000000, 2px 2px #000000";
-
 const ChatOverlay: React.FC<{ content?: IValue }> = ({ content }) => {
   console.log(content);
   const type = getType(content?.type);
@@ -98,7 +101,7 @@ const ChatOverlay: React.FC<{ content?: IValue }> = ({ content }) => {
               style={{
                 fontSize: 16,
                 color: content?.nameColor || "white",
-                textShadow,
+                textShadow: TEXT_SHADOW,
               }}
             >
               <Avatar
@@ -115,7 +118,7 @@ const ChatOverlay: React.FC<{ content?: IValue }> = ({ content }) => {
               style={{
                 fontSize: 16,
                 marginTop: 20,
-                textShadow,
+                textShadow: TEXT_SHADOW,
                 color: "white",
               }}
             >

@@ -31,9 +31,16 @@ function processData({ contents }: any) {
 (window as any).processData = processData;
 
 
-// comment-out to test your theme
+// add &test in the params for testing
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
 const App = () => {
   return SAMPLE_DATA.map((contents) => processData({ contents }));
 };
 
-App();
+if (urlParams.has('test')) {
+  App();
+}
+
+
+
