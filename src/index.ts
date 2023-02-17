@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import Demo from "./demo";
+import Demo from "./component/demo";
 
 
 const data = [
@@ -59,15 +59,15 @@ function processData({ contents }: any) {
   mountNode.style.display = "flex";
   mountNode.style.flexDirection = "column";
 
-  mountNode.appendChild(node);
+  mountNode.prepend(node);
 }
 
 (window as any).processData = processData;
 
 
 // comment-out to test your theme
-// const App = () => {
-//   return data.map((i) => processData(i));
-// };
+const App = () => {
+  return data.map((contents) => processData({ contents }));
+};
 
-// App();
+App();

@@ -25,8 +25,8 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "title": "Basic - antd@5.2.1",
-  "name": "basic-antd521-forked",
+  "title": "social-stream-theming",
+  "name": "Hawiie13",
   "description": null,
   "version": "0.0.0",
   "eslintConfig": {

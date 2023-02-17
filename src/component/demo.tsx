@@ -1,6 +1,12 @@
 import { Avatar, Row, Col, Typography } from "antd";
 import React from "react";
+import { createFromIconfontCN } from "@ant-design/icons";
+import { FACEBOOK, ICON_FONT_CN_LINK, TWITCH, DEFAULT } from "../enum";
 const { Text } = Typography;
+
+const IconFont = createFromIconfontCN({
+  scriptUrl: ICON_FONT_CN_LINK,
+});
 
 type IValue = {
   chatname: string;
@@ -17,66 +23,29 @@ type IValue = {
   nameColor: string;
 };
 
-const data: IValue[] = [
-  {
-    chatname: "Hawiie13",
-    chatbadges: [
-      "https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1",
-    ],
-    nameColor: "rgb(154, 205, 50)",
-    chatmessage: "test",
-    chatimg: "https://api.socialstream.ninja/twitch/?username=Hawiie13",
-    hasDonation: "",
-    hasMembership: "",
-    type: "twitch",
-    sourceImg:
-      "https://static-cdn.jtvnw.net/jtv_user_pictures/579d1ad3-fea3-4735-b9ce-b14f15ef3c48-profile_image-150x150.png",
-    tid: 1216279723,
-    id: 153,
-    contentimg: "",
-  },
-  {
-    chatname: "Hawiie13",
-    chatbadges: [
-      "https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1",
-    ],
-    nameColor: "rgb(154, 205, 50)",
-    chatmessage: "test",
-    chatimg: "https://api.socialstream.ninja/twitch/?username=Hawiie13",
-    hasDonation: "",
-    hasMembership: "",
-    type: "facebook",
-    sourceImg:
-      "https://static-cdn.jtvnw.net/jtv_user_pictures/579d1ad3-fea3-4735-b9ce-b14f15ef3c48-profile_image-150x150.png",
-    tid: 1216279723,
-    id: 153,
-    contentimg: "",
-  },
-];
-
-const App = () => {
-  return data.map((i) => <ChatOverlay content={i} />);
-};
-
 const getType = (type?: string) => {
   switch (type) {
     case "facebook":
       return {
-        image:
-          "https://i.pinimg.com/originals/fd/eb/dd/fdebdd6ec05cfb9bdc6ebfb0dfe91e6f.jpg",
-        color: "rgba(139, 157, 195, 0.3)",
+        image: FACEBOOK.ICON_IMAGE_LINK,
+        bubbleColor: FACEBOOK.BUBBLE_COLOR,
+        icon: <IconFont color="#4267B2" type={FACEBOOK.ICON_FONT_CN} />,
+        color: FACEBOOK.BACKGROUND_COLOR,
       };
     case "twitch":
       return {
-        image:
-          "https://www.iconpacks.net/icons/2/free-twitch-icon-2178-thumb.png",
-        color: "rgba(129, 95, 192, 0.3)",
+        image: TWITCH.ICON_IMAGE_LINK,
+        bubbleColor: TWITCH.BUBBLE_COLOR,
+        icon: <IconFont type={TWITCH.ICON_FONT_CN} />,
+        color: TWITCH.BACKGROUND_COLOR,
       };
 
     default:
       return {
-        image: "https://friconix.com/png/fi-cnsuxx-question-mark.png",
-        color: "white",
+        image: DEFAULT.ICON_IMAGE_LINK,
+        bubbleColor: DEFAULT.BUBBLE_COLOR,
+        icon: <IconFont type={DEFAULT.ICON_FONT_CN} />,
+        color: DEFAULT.BACKGROUND_COLOR,
       };
   }
 };
@@ -102,15 +71,16 @@ const ChatOverlay: React.FC<{ content?: IValue }> = ({ content }) => {
   return (
     <>
       <div className="queueid"></div>
-      <Col style={{ margin: 5, width: "41px" }}>
+      <Col style={{ margin: 9, width: "41px" }}>
         <Avatar
-          size={{ xs: 30, sm: 30, md: 30, lg: 30, xl: 30, xxl: 30 }}
-          src={`${content?.type}.png`}
+          size={30}
+          style={{ backgroundColor: type.color }}
+          icon={type.icon}
         />
       </Col>
       <Col
         style={{
-          backgroundColor: type.color,
+          backgroundColor: type.bubbleColor,
           padding: 10,
           borderRadius: 15,
           width: "100% - 41px",
@@ -133,7 +103,7 @@ const ChatOverlay: React.FC<{ content?: IValue }> = ({ content }) => {
             >
               <Avatar
                 style={{ marginTop: "-5px" }}
-                size={{ xs: 25, sm: 25, md: 25, lg: 25, xl: 25, xxl: 25 }}
+                size={30}
                 src={content?.chatimg || content?.sourceImg}
               />
               &nbsp; {content?.chatname}
