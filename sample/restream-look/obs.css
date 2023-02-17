@@ -1,0 +1,16 @@
+/* add this to obs css settings */
+
+body {
+  background-color: rgba(0, 0, 0, 0);
+  margin: 0px auto;
+  overflow: hidden;
+}
+
+.highlight-chat {
+  background-color: transparent;
+}
+
+/* stream icon fix */
+span.anticon > svg {
+  margin-top: 7px;
+}

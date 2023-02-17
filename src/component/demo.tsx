@@ -97,7 +97,7 @@ const ChatOverlay: React.FC<{ content?: IValue }> = ({ content }) => {
               strong
               style={{
                 fontSize: 16,
-                color: content?.nameColor || "black",
+                color: content?.nameColor || "white",
                 textShadow,
               }}
             >

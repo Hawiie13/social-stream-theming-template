@@ -1,43 +1,9 @@
 import { createRoot } from "react-dom/client";
 import Demo from "./component/demo";
+import { SAMPLE_DATA } from "./enum"
 
 
-const data = [
-  {
-    chatname: "Hawiie13",
-    chatbadges: [
-      "https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1",
-    ],
-    nameColor: "rgb(154, 205, 50)",
-    chatmessage: "test",
-    chatimg: "https://api.socialstream.ninja/twitch/?username=Hawiie13",
-    hasDonation: "",
-    hasMembership: "",
-    type: "twitch",
-    sourceImg:
-      "https://static-cdn.jtvnw.net/jtv_user_pictures/579d1ad3-fea3-4735-b9ce-b14f15ef3c48-profile_image-150x150.png",
-    tid: 1216279723,
-    id: 153,
-    contentimg: "",
-  },
-  {
-    chatname: "Hawiie13",
-    chatbadges: [
-      "https://static-cdn.jtvnw.net/badges/v1/5527c58c-fb7d-422d-b71b-f309dcb85cc1/1",
-    ],
-    nameColor: "rgb(154, 205, 50)",
-    chatmessage: "test",
-    chatimg: "https://api.socialstream.ninja/twitch/?username=Hawiie13",
-    hasDonation: "",
-    hasMembership: "",
-    type: "facebook",
-    sourceImg:
-      "https://static-cdn.jtvnw.net/jtv_user_pictures/579d1ad3-fea3-4735-b9ce-b14f15ef3c48-profile_image-150x150.png",
-    tid: 1216279723,
-    id: 153,
-    contentimg: "",
-  },
-];
+
 
 function processData({ contents }: any) {
   const content = contents
@@ -56,10 +22,10 @@ function processData({ contents }: any) {
   root.render(Demo({ content }));
 
   const mountNode = document.getElementById("output") as HTMLDivElement;
-  mountNode.style.display = "flex";
-  mountNode.style.flexDirection = "column";
-
-  mountNode.prepend(node);
+  mountNode.style.width = "100%";
+  mountNode.style.position = "absolute";
+  mountNode.style.bottom = "0px";
+  mountNode.appendChild(node);
 }
 
 (window as any).processData = processData;
@@ -67,7 +33,7 @@ function processData({ contents }: any) {
 
 // comment-out to test your theme
 const App = () => {
-  return data.map((contents) => processData({ contents }));
+  return SAMPLE_DATA.map((contents) => processData({ contents }));
 };
 
 App();
