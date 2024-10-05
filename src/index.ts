@@ -49,7 +49,7 @@ function processData({ contents }: any) {
     const [entry] = entries
     node.style.visibility = entry.isIntersecting ? "visible" : "hidden"
   }, {
-    root: null,
+    root: mountNode,
     rootMargin: "0px",
     threshold: 0.99
   });
