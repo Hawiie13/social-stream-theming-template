@@ -6,6 +6,7 @@ import {
   ICON_FONT_CN_LINK,
   TWITCH,
   DEFAULT,
+  TIKTOK,
   TEXT_SHADOW,
 } from "../enum";
 const { Text } = Typography;
@@ -38,6 +39,13 @@ const getType = (type?: string) => {
         icon: <IconFont color="#4267B2" type={FACEBOOK.ICON_FONT_CN} />,
         color: FACEBOOK.BACKGROUND_COLOR,
       };
+    case "tiktok":
+      return {
+        image: TIKTOK.ICON_IMAGE_LINK,
+        bubbleColor: TIKTOK.BUBBLE_COLOR,
+        icon: <IconFont color="#4267B2" type={TIKTOK.ICON_FONT_CN} />,
+        color: TIKTOK.BACKGROUND_COLOR,
+      };
     case "twitch":
       return {
         image: TWITCH.ICON_IMAGE_LINK,
@@ -58,6 +66,7 @@ const getType = (type?: string) => {
 type IChatBadges = { chatBadges?: IValue["chatbadges"] };
 
 const ChatBadges: any = ({ chatBadges }: IChatBadges) => {
+  if (!Array.isArray(chatBadges)) return null;
   return chatBadges?.map((v, i) => (
     <Avatar
       key={i}
@@ -69,7 +78,6 @@ const ChatBadges: any = ({ chatBadges }: IChatBadges) => {
 };
 
 const ChatOverlay: React.FC<{ content?: IValue }> = ({ content }) => {
-  console.log(content);
   const type = getType(content?.type);
   return (
     <>
@@ -108,8 +116,20 @@ const ChatOverlay: React.FC<{ content?: IValue }> = ({ content }) => {
                 style={{ marginTop: "-5px" }}
                 size={30}
                 src={content?.chatimg || content?.sourceImg}
+                icon={
+                  <IconFont
+                    size={100}
+                    color="#4267B2"
+                    type="social-stream-person"
+                  />
+                }
               />
-              &nbsp; {content?.chatname}
+              &nbsp;
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: content?.chatname || "",
+                }}
+              />
               <ChatBadges chatBadges={content?.chatbadges} />
             </Text>
           </Col>

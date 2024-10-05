@@ -14,3 +14,31 @@ body {
 span.anticon > svg {
   margin-top: 7px;
 }
+
+/* for animation */
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    display: none;
+  }
+  100% {
+    opacity: 1;
+    display: flex;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+      opacity: 0;
+      display: none;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fading {
+  animation: fadeIn 0.5s ease-in;
+}
+  

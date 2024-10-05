@@ -13,7 +13,7 @@ To Test
 
 add `?test` on the url
 
-when done coment again the code above
+when done comment again the code above
 the run
 npm run build
 
