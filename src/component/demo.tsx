@@ -36,7 +36,13 @@ const getType = (type?: string) => {
       return {
         image: FACEBOOK.ICON_IMAGE_LINK,
         bubbleColor: FACEBOOK.BUBBLE_COLOR,
-        icon: <IconFont color="#4267B2" type={FACEBOOK.ICON_FONT_CN} />,
+        icon: (
+          <IconFont
+            color="#4267B2"
+            type={FACEBOOK.ICON_FONT_CN}
+            style={{ paddingTop: 7 }}
+          />
+        ),
         color: FACEBOOK.BACKGROUND_COLOR,
       };
     case "tiktok":
@@ -82,7 +88,7 @@ const ChatOverlay: React.FC<{ content?: IValue }> = ({ content }) => {
   return (
     <>
       <div className="queueid"></div>
-      <Col style={{ margin: 9, width: "41px" }}>
+      <Col style={{ margin: 9 }} flex="41px">
         <Avatar
           size={30}
           style={{ backgroundColor: type.color }}
@@ -94,13 +100,8 @@ const ChatOverlay: React.FC<{ content?: IValue }> = ({ content }) => {
           backgroundColor: type.bubbleColor,
           padding: 10,
           borderRadius: 15,
-          width: "100% - 41px",
         }}
-        xs={18}
-        sm={21}
-        md={22}
-        xl={22}
-        xxl={22}
+        flex="calc(100% - 60px)"
       >
         <Row>
           <Col span={24}>

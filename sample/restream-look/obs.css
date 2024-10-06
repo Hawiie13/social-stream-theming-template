@@ -1,44 +1,27 @@
-/* add this to obs css settings */
-
-body {
-  background-color: rgba(0, 0, 0, 0);
-  margin: 0px auto;
-  overflow: hidden;
+div:not([data-source-type="facebook"]).fading span.anticon >svg {
+	margin-top:6px
 }
-
-.highlight-chat {
-  background-color: transparent;
-}
-
-/* stream icon fix */
-span.anticon > svg {
-  margin-top: 7px;
-}
-
-/* for animation */
 
 @keyframes fadeIn {
-  0% {
-    opacity: 0;
-    display: none;
-  }
-  100% {
-    opacity: 1;
-    display: flex;
-  }
-}
-
-@keyframes fadeOut {
-  0% {
+    0% {
       opacity: 0;
-      display: none;
+    }
+    100% {
+      opacity: 1;
+    }
   }
-  100% {
-    opacity: 1;
-  }
-}
-
-.fading {
-  animation: fadeIn 0.5s ease-in;
-}
   
+  @keyframes fadeOut {
+    0% {
+        opacity: 0;
+        display: none;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .fading {
+    animation: fadeIn 0.5s ease-in;
+  }
+    

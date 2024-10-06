@@ -1,14 +1,2525 @@
+<html lang="en"
+  style="--background-color:#2B2E38; --menu-background-color:#191B26; --scale-output:2; --pressed-color: unset;">
 
-    <!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="theme-color" content="#000000">
-      </head>
-      <body>
-        <div id="output" style="padding: 24px" />
-        <script>const mountNode = document.getElementById('output');</script>
-      </body>
-    </html>
-  
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+  <title>Social Stream - Dashboard</title>
+  <meta name="title" content="Social Stream - Dashboard">
+  <link rel="icon" href="./icons/favicon.ico">
+  <link href="./thirdparty/NotoColorEmoji.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <meta name="robots" content="noindex">
+  <style>
+    :root {
+      --show-emoji-only: flex;
+      --list-or-horizontal: flex;
+      --show-donos-only: flex;
+      --show-queue-only: flex;
+      --scale-output: 1;
+      --font-color: #fff;
+      --font-color-name: #ddd;
+      --background-color: #36393f;
+      --menu-background-color: #2f3136;
+      --menu-border-color: 0 0 5px #000;
+      --link-color: #5af;
+      --highlight-base: #0000;
+      --highlight-base2: #9991;
+      --highlight-compact: #3335;
+      --highlight-compact2: #3333;
+      --stylized-emoji: 140%;
+      --stylized-img: 23px;
+      --show-images: inline-block;
+      --comment-font-size: unset;
+      --message-line-height: 22px;
+      --author-font-size: 17px;
+      --electron-drag-fix: drag;
+      --time-arrived-padding: 1px;
+      --profile-pic-border: 0 solid black;
+      --cursor-type: pointer;
+      --pressed-color: #9c9c;
+      --blur-amount: 5px;
+
+      --pinned-queued-bg: #9d99cc;
+      --pinned-bg: #712a65;
+
+      --flex-direction: row;
+
+      --font-family: Sora, Avenir Next, Roboto, Helvetica, Geneva, Verdana, Arial, sans-serif;
+
+      --donation-bgcolor: #feffad33;
+      --donation-bgcolor-odd: #fdff6533;
+      --donation-bgcolor-bubble: #171703e0;
+      --donation-bgcolor-bubble-odd: #171700e0;
+
+      --member-bgcolor: #adfeff33;
+      --member-bgcolor-odd: #65fdff33;
+      --member-bgcolor-bubble: #0f1620d1;
+      --member-bgcolor-bubble-odd: #060c16d1;
+
+      --special-bgcolor: #0f2bfd33;
+      --special-bgcolor-odd: #273de433;
+      --special-bgcolor-bubble: #0d2240d1;
+      --special-bgcolor-bubble-odd: #08244cd1;
+      --bgcolor-bubble: #000d;
+      --bgcolor-bubble-odd: #111d;
+
+      --scrollbar-visible: inherit;
+      --padding-rows: 3px;
+    }
+
+    .closeBtn {
+      position: absolute;
+      right: -15px;
+      width: 20px;
+      background-color: #bababa;
+      padding: 3px;
+      border-radius: 50%;
+      height: 19px;
+      top: -20px;
+      text-align: center;
+      border: 2px solid black;
+      cursor: pointer;
+    }
+
+    .closeBtn:hover {
+      background-color: #9a9a9a;
+    }
+
+    .closeBtn:active {
+      background-color: #7a7a7a;
+    }
+
+    #TipRightClick {
+      text-shadow: 0 0 black;
+      cursor: help;
+      color: grey;
+      margin: auto;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      top: 7px;
+      position: relative;
+    }
+
+    .volume-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .volume-slider {
+      position: absolute;
+      bottom: 40px;
+      /* Adjust as needed to position above the button */
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    .volume-container:hover .volume-slider {
+      display: block;
+    }
+
+    .blurred {
+      filter: blur(var(--blur-amount));
+    }
+
+    @keyframes float {
+      0% {
+        box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.6);
+        transform: translatey(0px);
+        animation-timing-function: linear;
+        opacity: 1;
+      }
+
+      10% {
+        box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.6);
+        transform: translate(3px, -30px);
+        animation-timing-function: linear;
+        opacity: 0.9;
+      }
+
+      20% {
+        box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.2);
+        transform: translate(6px, -54px);
+        animation-timing-function: linear;
+        opacity: 0.8;
+      }
+
+      30% {
+        box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.2);
+        transform: translate(3px, -81px);
+        animation-timing-function: linear;
+        opacity: 0.7;
+      }
+
+      40% {
+        box-shadow: 0 10px 15px 0px rgba(0, 0, 0, 0.2);
+        transform: translate(0px, -108px);
+        animation-timing-function: linear;
+        opacity: 0.6;
+      }
+
+      50% {
+        box-shadow: 0 10px 15px 0px rgba(0, 0, 0, 0.2);
+        transform: translate(-5px, -135px);
+        animation-timing-function: linear;
+        opacity: 0.5;
+      }
+
+      60% {
+        box-shadow: 0 15px 15px 0px rgba(0, 0, 0, 0.2);
+        transform: translate(-8px, -162px);
+        animation-timing-function: linear;
+        opacity: 0.4;
+      }
+
+      70% {
+        box-shadow: 0 15px 15px 0px rgba(0, 0, 0, 0.2);
+        transform: translate(-5px, -189px);
+        animation-timing-function: linear;
+        opacity: 0.3;
+      }
+
+      80% {
+        box-shadow: 0 20px 15px 0px rgba(0, 0, 0, 0.2);
+        transform: translate(0px, -216px);
+        animation-timing-function: linear;
+        opacity: 0.2;
+      }
+
+      90% {
+        box-shadow: 0 20px 15px 0px rgba(0, 0, 0, 0.2);
+        transform: translate(6px, -243px);
+        animation-timing-function: linear;
+        opacity: 0.1;
+      }
+
+      100% {
+        box-shadow: 0 25px 15px 0px rgba(0, 0, 0, 0.2);
+        transform: translate(10px, -270px);
+        animation-timing-function: linear;
+        opacity: 0;
+      }
+    }
+
+    .modal {
+      display: none;
+      /* Hidden by default */
+      position: fixed;
+      /* Stay in place */
+      z-index: 1000;
+      /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%;
+      /* Full width */
+      height: 100%;
+      /* Full height */
+      overflow: auto;
+      /* Enable scroll if needed */
+      background-color: rgba(0, 0, 0, 0.4);
+      /* Black w/ opacity */
+    }
+
+    .modal-content {
+      background-color: #888;
+      margin: 0% auto;
+      /* 15% from the top and centered */
+      padding: 20px;
+      border: 1px solid #fff;
+      width: 80%;
+      /* Could be more or less, depending on screen size */
+    }
+
+    .close-btn {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close-btn:hover,
+    .close-btn:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+
+    #obsControlModal {
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #obsControlModal .modal-content {
+      background-color: #444;
+      color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    #obsControlModal h2 {
+      text-align: center;
+      margin-top: 0;
+      color: #f0f0f0;
+    }
+
+    #obsControlModal .modal-section {
+      margin-bottom: 20px;
+    }
+
+    #obsControlModal h3 {
+      margin-bottom: 10px;
+      color: #ddd;
+    }
+
+    #obsControlModal button {
+      background-color: #555;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .horizontal .bubble {
+      vertical-align: top;
+    }
+
+    #obsControlModal button:hover {
+      background-color: #666;
+    }
+
+    #obsControlModal button.active {
+      background-color: #007bff;
+    }
+
+    #obsControlModal #sceneButtons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    #obsControlModal #obsStatus p {
+      margin: 5px 0;
+    }
+
+    #obsControlModal .close-btn {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      background-color: #d9534f;
+    }
+
+    #obsControlModal .close-btn:hover {
+      background-color: #c9302c;
+    }
+
+    @media (max-width: 600px) {
+      .modal .modal-content {
+        padding: 20px;
+      }
+
+      .modal button {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+    }
+
+    .dissolve {
+      position: fixed;
+      bottom: 0;
+      box-shadow: 0 5px 15px 0px rgba(0, 0, 0, 0.6);
+      transform: translatey(0px);
+      animation: float 3s ease-in-out 1;
+      animation-timing-function: linear;
+    }
+
+    .hl-imgContent {
+      vertical-align: middle;
+    }
+
+    #output {
+      zoom: var(--scale-output);
+      transform: var(--scale-output);
+      transform-origin: 0 0;
+      width: 100%;
+      margin-bottom: calc(46px / var(--scale-output));
+      /* Same as menu height + menu padding-top + menu padding-bottom */
+    }
+
+    .hl-profile-pic {
+      border: var(--profile-pic-border);
+      min-width: 24px;
+      width: 24px;
+      height: 24px;
+      object-fit: cover;
+    }
+
+    .hl-badge {
+      margin: 0px 2px 0px 0px;
+      vertical-align: top;
+      max-width: 100px;
+      max-height: 20px;
+      height: 20px;
+      display: inline-block;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .hl-badge:last-child {
+      padding: 0 2px 0px 0px;
+    }
+
+    a {
+      color: var(--link-color);
+      display: contents;
+      text-decoration: none;
+    }
+
+    .fixed {
+      position: fixed !important;
+    }
+
+    .bottom {
+      bottom: 0;
+    }
+
+    .hl-imgContent img,
+    .hl-imgContent video {
+      max-width: 80px;
+      margin: 0 2px;
+      max-height: 30px;
+    }
+
+
+    .largeContent .hl-imgContent img,
+    .largeContent .hl-imgContent video {
+      max-width: 160px !important;
+      margin: 0 2px;
+      max-height: 80px !important;
+    }
+
+    .largeContent .hl-content {
+      margin: 4px 1px;
+    }
+
+    /* example of how to remotely load a font */
+    @font-face {
+      font-family: "opendyslexic";
+      src: url("https://vdo.ninja/examples/OpenDyslexic-Regular.otf");
+      font-style: normal;
+      font-weight: normal;
+    }
+
+    @font-face {
+      font-family: NotoColorEmojiLimited;
+      unicode-range: U+1F1E6-1F1FF;
+      src: url(./thirdparty/NotoColorEmoji.ttf);
+      font-display: swap;
+    }
+
+    /* latin-ext */
+    @font-face {
+      font-family: "Sora";
+      font-style: normal;
+      font-weight: 200;
+      font-display: swap;
+      src: url(./thirdparty//xMQbuFFYT72XzQspDre2.woff2) format("woff2");
+      unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+
+    /* latin */
+    @font-face {
+      font-family: "Sora";
+      font-style: normal;
+      font-weight: 200;
+      font-display: swap;
+      src: url(./thirdparty//xMQbuFFYT72XzQUpDg.woff2) format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    /* latin-ext */
+    @font-face {
+      font-family: "Sora";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(./thirdparty/xMQbuFFYT72XzQspDre2.woff2) format("woff2");
+      unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+
+    /* latin */
+    @font-face {
+      font-family: "Sora";
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(./thirdparty//xMQbuFFYT72XzQUpDg.woff2) format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    /* latin-ext */
+    @font-face {
+      font-family: "Sora";
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url(./thirdparty//xMQbuFFYT72XzQspDre2.woff2) format("woff2");
+      unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+
+    /* latin */
+    @font-face {
+      font-family: "Sora";
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url(./thirdparty//xMQbuFFYT72XzQUpDg.woff2) format("woff2");
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    body {
+      font-family: "NotoColorEmojiLimited", var(--font-family);
+      color: var(--font-color);
+      margin: 0 0;
+      background-color: var(--background-color);
+      text-shadow: -2px -2px #000000, -2px -1px #000000, -2px 0px #000000, -2px 1px #000000, -2px 2px #000000, -1px -2px #000000, -1px -1px #000000, -1px 0px #000000, -1px 1px #000000, -1px 2px #000000, 0px -2px #000000, 0px -1px #000000, 0px 0px #000000, 0px 1px #000000, 0px 2px #000000, 1px -2px #000000, 1px -1px #000000, 1px 0px #000000, 1px 1px #000000, 1px 2px #000000, 2px -2px #000000, 2px -1px #000000, 2px 0px #000000, 2px 1px #000000, 2px 2px #000000;
+      overflow-x: hidden;
+      scrollbar-color: #666 #201c29;
+    }
+
+    input[type="checkbox"] {
+      padding: 0;
+      margin: 0 5px 0 0;
+      width: 15px;
+      height: 15px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 15px;
+      display: var(--scrollbar-visible);
+    }
+
+    ::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 13px rgb(0 0 0 / 90%);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border-radius: 4px;
+      -webkit-box-shadow: inset 0 0 16px rgb(150 150 150 / 100%);
+      border: solid 3px transparent;
+    }
+
+    body>div {
+      -webkit-app-region: no-drag;
+    }
+
+    body.lightmode {
+      font-weight: 500;
+      text-shadow: -2px -2px #fff, -2px -1px #fff, -2px 0px #fff, -2px 1px #fff, -2px 2px #fff, -1px -2px #fff, -1px -1px #fff, -1px 0px #fff, -1px 1px #fff, -1px 2px #fff, 0px -2px #fff, 0px -1px #fff, 0px 0px #fff, 0px 1px #fff, 0px 2px #fff, 1px -2px #fff, 1px -1px #fff, 1px 0px #fff, 1px 1px #fff, 1px 2px #fff, 2px -2px #fff, 2px -1px #fff, 2px 0px #fff, 2px 1px #fff, 2px 2px #fff;
+    }
+
+    .fade-in-image {
+      animation: fadeIn 0.2s;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+
+      99% {
+        opacity: 0.2;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .bot.compactmode {
+      padding: 0;
+    }
+
+    .randommode {
+      position: absolute !important;
+      max-width: 20vw;
+    }
+
+    .hl-firstline {
+      display: block;
+      line-height: 100%;
+      padding-bottom: 3px;
+    }
+
+    .twoLines .hl-firstline {
+      align-items: center;
+      display: flex;
+      margin-top: 8px;
+    }
+
+    .allowfat .hl-message {
+      max-width: 300px;
+      word-break: keep-all;
+      line-break: loose;
+      overflow-wrap: break-word;
+      overflow: auto;
+      white-space: normal;
+    }
+
+
+    .twoLines.alignright .hl-firstline {
+      display: flex;
+      flex-direction: row-reverse;
+      margin: 3px 0 5px 0;
+    }
+
+    .hl-firstline .hl-name {
+      top: 2px;
+      bottom: unset;
+    }
+
+    .twoLines .hl-firstline .hl-name {
+      align-items: center;
+      display: flex;
+    }
+
+    .twoLines.alignright .hl-firstline .hl-name {
+      display: flex;
+      flex-direction: row-reverse;
+      margin: 0 5px;
+      top: 1px;
+      position: relative;
+    }
+
+    .hl-firstline .hl-name .hl-badge {
+      vertical-align: inherit;
+      margin: 1px 0px;
+    }
+
+    .hl-message {
+      margin: auto 1px;
+      overflow-wrap: anywhere;
+      line-height: max(var(--message-line-height), var(--comment-font-size));
+      font-size: var(--comment-font-size);
+    }
+
+    .hl-message img,
+    .hl-message svg {
+      margin: auto 0px;
+      padding: 0;
+      display: inline-block;
+      height: 24px;
+      max-width: 24px;
+      max-height: 24px;
+    }
+
+    .hl-message img+img,
+    .hl-message img+svg,
+    .hl-message svg+img,
+    .hl-message svg+svg {
+      margin: auto 0px;
+    }
+
+    .hl-message .hl-content img,
+    .hl-message .hl-content video {
+      max-width: 38px;
+    }
+
+    .hl-message img.chat-line__message--emote-gigantified,
+    .hl-message svg.chat-line__message--emote-gigantified {
+      position: relative;
+      margin: auto 1px;
+      padding: 0;
+      display: inline-block;
+      height: 56px;
+      max-width: 112px;
+      max-height: 56px;
+    }
+
+    .hl-message .hl-content img,
+    .hl-message .hl-content video.chat-line__message--emote-gigantified {
+      max-width: 112px;
+    }
+
+    .notcompactmode .hl-message img,
+    .notcompactmode .hl-message svg {
+      height: 19px;
+      max-height: 19px;
+    }
+
+    .notcompactmode .hl-content img,
+    .notcompactmode .hl-content svg {
+      max-width: 80px;
+    }
+
+    .notcompactmode .hl-message img.chat-line__message--emote-gigantified,
+    .notcompactmode .hl-message svg.chat-line__message--emote-gigantified {
+      height: 56px;
+      max-height: 56px;
+    }
+
+    .notcompactmode .hl-content img.chat-line__message--emote-gigantified,
+    .notcompactmode .hl-content svg.chat-line__message--emote-gigantified {
+      max-width: 112px;
+      width: 112px;
+    }
+
+    .hl-message .hl-badge svg {
+      max-height: 16px;
+      margin-top: 1px;
+    }
+
+    .hl-message .hl-badge.img,
+    .hl-message .hl-badge.video {
+      max-height: 16px;
+      margin-top: 4px;
+    }
+
+    .hl-message img:not(:first-child):last-child {
+      margin: auto 1px auto 0px;
+    }
+
+    .hl-message span>img,
+    .hl-message span>video {
+      margin: auto 1px;
+    }
+
+    .hl-message img:first-child:not(:last-child) {
+      margin: auto 0px auto 1px;
+    }
+
+    .twoLines.alignright .hl-message {
+      display: flex;
+      flex-direction: row-reverse;
+      margin: 0 0 4px 0;
+    }
+
+    .twoLines.alignright .hl-message .time-arrived {
+      margin: 6px 2px auto 8px;
+    }
+
+    .highlight {
+      background-color: yellow !important;
+    }
+
+    svg.regular-emote,
+    img.regular-emote {
+      margin: auto 0;
+    }
+
+    img,
+    svg {
+      display: inline-block;
+      max-width: 48px;
+      max-height: 24px;
+      position: relative;
+      margin: auto;
+      padding: 0;
+      object-fit: contain;
+      vertical-align: bottom;
+    }
+
+    #sceneButtons button.active {
+      border: 3px solid blue;
+    }
+
+    .hl-leftside {
+      width: 75px;
+      height: 75px;
+      display: inline-block;
+      margin: 3px;
+      min-width: 75px;
+      min-height: 75px;
+    }
+
+    .hl-leftside img,
+    .hl-leftside video {
+      max-height: 100%;
+      max-width: 100%;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      margin: 0;
+      padding: 0;
+    }
+
+    horizontal .largeavatar .hl-leftside {
+      margin: 0px;
+    }
+
+    .hl-righttopline {
+      max-height: 16px;
+      display: block;
+      margin: 8px 2px;
+    }
+
+    .hl-righttopline .hl-source-type {
+      max-height: 11px;
+      vertical-align: baseline;
+      top: 1px;
+    }
+
+    .hl-righttopline .hl-badge {
+      max-height: 16px;
+      vertical-align: middle;
+      object-fit: contain;
+      display: inline-block;
+    }
+
+    .hl-righttopline .hl-name {
+      margin-right: 0;
+    }
+
+    .hl-righttopline .time-arrived {
+      bottom: 1px;
+      position: relative;
+    }
+
+    .hl-righttopline .hl-badges {
+      margin: auto 0px auto 6px;
+    }
+
+    .hl-rightside {
+      display: inline-block;
+      margin: 0px 0px 0px 5px;
+    }
+
+    .hl-rightside .hl-message {
+      margin: 1px 7px;
+    }
+
+    .bot>.hl-message {
+      padding: 5px 0 5px 5px;
+      font-style: italic;
+    }
+
+    .hl-compact-message {
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+      padding-left: 5px;
+      display: inline-block;
+      height: 23px;
+    }
+
+    .hl-badges {
+      margin-left: 4px;
+    }
+
+    .highlight-chat {
+      display: var(--list-or-horizontal);
+      cursor: var(--cursor-type);
+      width: fit-content;
+      background-color: var(--highlight-base);
+      min-height: 24px;
+      max-width: 100%;
+      flex-direction: var(--flex-direction);
+      padding-top: var(--padding-rows) !important;
+      padding-bottom: var(--padding-rows) !important;
+    }
+
+
+    .highlight-chat.expand {
+      animation: expand 2s;
+      overflow: visible;
+      word-break: break-all;
+      line-break: anywhere;
+    }
+
+    @keyframes slideLeft {
+      from {
+        transform: translateX(150%);
+      }
+
+      to {
+        transform: translateX(0px);
+      }
+    }
+
+    .horizontal .highlight-chat {
+      vertical-align: top;
+      animation: expand 4s, slideLeft 1s ease-in-out forwards;
+    }
+
+    .horizontal .highlight-chat.fadein {
+      animation: expand 4s, slideLeft 1s ease-in-out forwards, fadein 2s;
+    }
+
+    .horizontal .highlight-chat.fadeout {
+      animation: expand 4s, slideLeft 1s ease-in-out forwards, fadeout 1s;
+    }
+
+    .larger-emojis {
+      top: 0px;
+      position: relative;
+    }
+
+    .highlight-chat.larger-emojis {
+      overflow: hidden;
+    }
+
+    .horizontal .highlight-chat.compactmode {
+      padding-top: 3px;
+      background-color: #0000;
+    }
+
+    .horizontal .compactmode.time-arrived {
+      margin: auto 0;
+    }
+
+    .larger-emojis:not(.expand) .hl-message {
+      line-height: 34px !important;
+    }
+
+    .horizontal .highlight-chat.larger-emojis {
+      line-height: 30px;
+      height: 40px;
+      max-height: 40px;
+    }
+
+    @keyframes ani {
+      0% {
+        transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+      }
+
+      50% {
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+      }
+
+      100% {
+        transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+      }
+    }
+
+    .brush {
+      animation: ani 400ms alternate 1;
+    }
+
+    img.icon:not(:loaded) {
+      aspect-ratio: 1;
+    }
+
+    .larger-emojis img:not(.hl-badge, .icon) {
+      height: var(--stylized-img);
+      max-width: calc(var(--stylized-img) * 3);
+      max-height: var(--stylized-img);
+    }
+
+
+    .hl-message img:not(.hl-badge, .icon) {
+      display: var(--show-images);
+    }
+
+    .hl-message .hl-badges .hl-badge.svg svg {
+      max-height: 20px;
+    }
+
+    .larger-emojis img.hl-badge {
+      top: 3px;
+      height: 22px;
+      max-height: 22px;
+    }
+
+    .larger-emojis .icon,
+    .larger-emojis .svg.hl-badge {
+      top: 3px;
+      height: 24px;
+      max-height: 24px;
+      vertical-align: top;
+    }
+
+    .larger-emojis .time-arrived {
+      vertical-align: top;
+    }
+
+    .hl-badge.svg {
+      object-fit: contain;
+      display: inline-block;
+      width: auto;
+    }
+
+    .notcompactmode .highlight-chat>img.icon {
+      top: 0px;
+      margin: 1.6px 2px auto 1px;
+    }
+
+    .notcompactmode .time-arrived {
+      margin: 8px 2px auto 1px;
+    }
+
+    .notcompactmode div:not(.expand)>.time-arrived {
+      margin: 9.5px 2px auto 1px;
+    }
+
+    .notcompactmode .larger-emojis>.time-arrived {
+      margin: 12px 2px auto 1px;
+    }
+
+    .notcompactmode .larger-emojis .icon {
+      margin: 5px 2px auto 1px;
+    }
+
+    .notcompactmode .larger-emojis .leftside.larger-emojis .icon {
+      margin: 0px 2px auto 1px;
+      vertical-align: top;
+    }
+
+    .notcompactmode .larger-emojis>.hl-name {
+      margin: 2px 5px 0 5px;
+    }
+
+    div {
+      display: inline-block;
+    }
+
+    .hide {
+      display: none !important;
+    }
+
+    .queueid::before {
+      content: attr(data-qid);
+    }
+
+    .queueid[data-qid] {
+      margin: auto 3px;
+    }
+
+    @keyframes expand {
+      0% {
+        max-width: 0px;
+      }
+
+      40% {
+        max-width: 600px;
+      }
+
+      80% {
+        max-width: 1200px;
+      }
+
+      100% {
+        max-width: 20000px;
+      }
+    }
+
+    .hl-name {
+      font-weight: 700;
+      margin: auto 5px;
+      position: relative;
+      left: 0;
+      width: fit-content;
+      color: var(--font-color-name);
+      display: inline-block;
+      font-size: var(--author-font-size);
+    }
+
+    .notcompactmode .hl-name {
+      margin: 3.14px 5px 0 5px;
+      min-width: max(135px, 12vw);
+      max-width: max(220px, 25vw);
+      white-space: unset;
+      min-height: 24px;
+      line-height: max(var(--author-font-size), var(--message-line-height));
+    }
+
+    .notcompactmode .highlight-chat {
+      width: 100%;
+      padding: 2px 1px;
+      margin: 0;
+      min-height: 27px;
+    }
+
+    @media only screen and (max-width: 330px) {
+      .vanilla.notcompactmode .highlight-chat {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 10px 1px 8px 1px;
+      }
+
+      .vanilla.notcompactmode .hl-message:not(.bubble) {
+        padding: 5px 2px 0;
+      }
+
+      .vanilla.notcompactmode .bubble {
+        margin: 2px 2px 0 0px;
+      }
+
+      .vanilla.notcompactmode .donationAmount {
+        margin-left: auto;
+        margin-right: 3px;
+      }
+
+      .vanilla.notcompactmode .hl-name {
+        min-width: unset;
+      }
+    }
+
+    @media only screen and (max-width: 180px) {
+      .time-arrived {
+        display: none !important;
+      }
+    }
+
+    @media only screen and (max-width: 660px) {
+      .OBS.vanilla.notcompactmode .highlight-chat {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 10px 1px 8px 1px;
+      }
+
+      .OBS.vanilla.notcompactmode .hl-message:not(.bubble) {
+        padding: 5px 2px 0;
+      }
+
+      .OBS.vanilla.notcompactmode .bubble {
+        margin: 2px 2px 0 0px;
+      }
+
+      .OBS.vanilla.notcompactmode .donationAmount {
+        margin-left: auto;
+        margin-right: 3px;
+      }
+
+      .OBS.vanilla.notcompactmode .hl-name {
+        min-width: unset;
+      }
+    }
+
+    @media only screen and (max-width: 360px) {
+      .OBS .time-arrived {
+        display: none !important;
+      }
+    }
+
+    .splitMode.hl-name {
+      text-align: right;
+      min-width: 0;
+      margin: 3.5px 5px 0 5px;
+      white-space: unset;
+      overflow: hidden;
+      height: 24px;
+      line-height: max(var(--author-font-size), var(--message-line-height));
+    }
+
+    .leftside .hl-badges {
+      position: relative;
+      top: 4px;
+    }
+
+    .leftside {
+      min-width: max(300px, 15vw);
+      text-align: right;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .leftside>img,
+    .leftside>video {
+      top: 0px;
+      margin: 2px 2px auto 1px;
+      vertical-align: top;
+    }
+
+    .larger-emojis>.hl-name {
+      height: 30px;
+      line-height: 29px;
+    }
+
+    .odd:not(.expand) {
+      background-color: var(--highlight-base2);
+    }
+
+    .highlight-chat:hover {
+      box-shadow: inset 7px 7px 20px #08080444, inset -7px -7px 20px #fcfcfc22, inset 1px 1px 2px #080804aa, inset -1px -1px 3px #fcfcfc77;
+    }
+
+    .highlight-chat.compactmode {
+      background-color: var(--highlight-compact);
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+      padding-right: 3px;
+    }
+
+    .odd.compactmode:not(.expand) {
+      background-color: var(--highlight-compact2);
+    }
+
+    .dono-highlight {
+      background-color: var(--donation-bgcolor);
+    }
+
+    .odd.dono-highlight:not(.expand) {
+      background-color: var(--donation-bgcolor-odd);
+    }
+
+    .bubble {
+      border-radius: 20px;
+      padding: 7px 10px;
+      background-color: var(--bgcolor-bubble);
+      margin: 0px 0 0px 5px;
+    }
+
+    .bubble.odd {
+      border-radius: 20px;
+      padding: 7px 10px;
+      background-color: var(--bgcolor-bubble-odd);
+      margin: 0px 0 0px 5px;
+    }
+
+    .bubble.dono-highlight {
+      background-color: var(--donation-bgcolor-bubble);
+      box-shadow: inset 0 0 2px #ffff00a1;
+    }
+
+    .bubble.odd.dono-highlight:not(.expand) {
+      background-color: var(--donation-bgcolor-bubble-odd);
+      box-shadow: inset 0 0 2px #ffff00a1;
+    }
+
+    .member {
+      background-color: var(--member-bgcolor);
+    }
+
+    .odd.member:not(.expand) {
+      background-color: var(--member-bgcolor-odd);
+    }
+
+    .bubble.member {
+      background-color: var(--member-bgcolor-bubble);
+      box-shadow: inset 0 0 2px #008f22b0;
+    }
+
+    .bubble.odd.member:not(.expand) {
+      background-color: var(--member-bgcolor-bubble-odd);
+      box-shadow: inset 0 0 2px #008f22b0;
+    }
+
+    .special {
+      background-color: var(--special-bgcolor);
+    }
+
+    .odd.special:not(.expand) {
+      background-color: var(--special-bgcolor-odd);
+    }
+
+    .bubble.special {
+      background-color: var(--special-bgcolor-bubble);
+      box-shadow: inset 0 0 2px #008f22b0;
+    }
+
+    .bubble.odd.special:not(.expand) {
+      background-color: var(--special-bgcolor-bubble-odd);
+      box-shadow: inset 0 0 2px #008f22b0;
+    }
+
+    body.lightmode .bubble {
+      border-radius: 20px;
+      padding: 10px;
+      background-color: #eeed;
+      margin: 0px 0 0px 5px;
+    }
+
+    body.lightmode .bubble.odd {
+      border-radius: 20px;
+      padding: 10px;
+      background-color: #eee7;
+      margin: 0px 0 0px 5px;
+    }
+
+    .donationAmount {
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ffe60073, 0 0 40px #ffe60073, 0 0 50px #ffe60073, 0 0 60px #ffe60073, 0 0 70px #ffe60073;
+      padding-left: 5px;
+      margin: auto;
+      white-space: nowrap;
+    }
+
+    @-webkit-keyframes glow {
+      from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ffe60073, 0 0 40px #ffe60073, 0 0 50px #ffe60073, 0 0 60px #ffe60073, 0 0 70px #ffe60073;
+      }
+
+      to {
+        text-shadow: 0 0 20px #fff, 0 0 30px #ffff4da6, 0 0 40px #ffff4da6, 0 0 50px #ffff4da6, 0 0 60px #ffff4da6, 0 0 70px #ffff4da6, 0 0 80px #ffff4da6;
+      }
+    }
+
+    a {
+      pointer-events: none;
+    }
+
+    .time-arrived {
+      font-size: 10px;
+      display: inline-block;
+      margin: auto 1px;
+      padding-right: var(--time-arrived-padding);
+      left: 2px;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    #menu {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      height: 42px;
+      padding-top: 4px;
+      padding-bottom: 0px;
+      display: flex;
+      justify-content: center;
+      background: var(--menu-background-color);
+      box-shadow: var(--menu-border-color);
+      z-index: 2;
+    }
+
+    body.lightmode #menu {
+      background-color: #f5f5f5;
+    }
+
+    .imgButton {
+      position: relative;
+      display: block;
+      background-repeat: no-repeat;
+      background-color: transparent;
+      /* alpha */
+      -webkit-app-region: no-drag;
+      border: none;
+      border-radius: 10px;
+
+      width: 32px;
+      height: 32px;
+      background-size: 32px;
+      margin-top: 3px;
+      margin-left: 2px;
+      margin-right: 2px;
+
+      -webkit-app-region: no-drag;
+    }
+
+    .imgButton:hover {
+      cursor: pointer;
+      box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.05);
+      /* Light the button */
+    }
+
+    .imgSmallButton {
+      /* Used with imgButton class */
+      width: 20px;
+      height: 20px;
+      background-size: 20px;
+      margin-top: 9px;
+    }
+
+    .horizontalSeparator {
+      background-image: url(./icons/horizontal_separator.png);
+      background-repeat: no-repeat;
+      width: 1px;
+      height: 32px;
+      background-size: 1px 32px;
+      margin-top: 6px;
+      margin-left: 4px;
+      margin-right: 4px;
+    }
+
+    .buttonBadge {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      background: #604080;
+      color: white;
+      border-radius: 50%;
+
+      top: -7px;
+      left: 11px;
+      width: 10px;
+      height: 10px;
+      font-size: 10px;
+    }
+
+    .smallButtonBadge {
+      /* Used with buttonBadge class */
+      top: -8px;
+      left: 5px;
+      width: 10px;
+      height: 10px;
+      font-size: 10px;
+    }
+
+    #queueSection {
+      display: flex;
+    }
+
+    #next_in_queue,
+    #show_only_queue {
+      display: inline-block;
+    }
+
+    .popInModal {
+      position: fixed !important;
+      padding: 4px 14px 4px;
+      background-color: #0a0a0a;
+      border-width: 2px;
+      border-style: solid;
+      border-color: #00000080;
+      border-radius: 12px;
+      position: absolute;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      -webkit-app-region: no-drag;
+      z-index: 10;
+    }
+
+    .popInModal>.imgButton {
+      margin-top: 2px;
+    }
+
+    @media only screen and (min-width: 700.001px) {
+      #chatInput_parent {
+        top: unset;
+        bottom: 5px;
+        position: fixed;
+        width: calc(100% - 10px);
+        max-width: 700px;
+      }
+    }
+
+    @media only screen and (max-width: 700px) {
+      #chatInput_parent {
+        position: fixed;
+        bottom: 45px;
+        left: 0;
+        right: 0;
+        top: unset;
+        border-radius: 0;
+        margin: 5px 0px;
+      }
+
+      #chatInputCloseButton {
+        display: none !important;
+      }
+    }
+
+    .modalTextInput {
+      height: 20px;
+      font-size: 18px;
+      background-color: transparent;
+      flex: 1;
+      border: 0;
+      outline: none;
+
+      color: #f5f5f5;
+      opacity: 1;
+      /* Firefox */
+    }
+
+    .hl-badge.textbadge {
+      border-radius: 6px;
+      padding: 0 5px;
+      font-size: 50%;
+      margin: 0 1px;
+    }
+
+    input[type="text"] {
+      width: 110px;
+    }
+
+    input[type="text"]:focus {
+      width: 170px;
+    }
+
+    input[type="text"] {
+      -webkit-transition: all 0.3s ease 0s;
+      transition: all 0.3s ease 0s;
+    }
+
+    span.zero-width-parent {
+      display: inline-block;
+      width: 0;
+      position: absolute;
+    }
+
+    span.zero-width-parent img.zero-width-emote {
+      right: 0;
+      position: absolute;
+    }
+
+    #chatInput {
+      width: 0;
+      top: 2px;
+      position: relative;
+    }
+
+    #chatInput_parent:empty {
+      width: 0;
+    }
+
+    #chatInput:focus {
+      width: 250px;
+    }
+
+    #chatInput_parent:not(.compactchat) {
+      margin: 2.5px max(calc((100% - 700px) / 2 - 20px), 0px);
+    }
+
+    #filter_messages {
+      width: 0;
+      top: 2px;
+      position: relative;
+    }
+
+    #filter_messages_parent:empty {
+      width: 0;
+    }
+
+    #filter_messages:focus {
+      width: 124px;
+    }
+
+    .hl-message:empty {
+      background-color: #0000;
+    }
+
+    body.lightmode .popInModal {
+      background-color: #f5f5f5;
+      border-color: #00000080;
+      color: black;
+    }
+
+    body.lightmode .modalTextInput {
+      color: #0a0a0a;
+      opacity: 1;
+      /* Firefox */
+    }
+
+    #menu.lightmode .imgButton:hover {
+      cursor: pointer;
+      box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.2);
+      /* Light the button */
+    }
+
+    @media only screen and (max-width: 620px) {
+      #chatInput:focus {
+        width: 200px;
+      }
+    }
+
+    @media only screen and (min-width: 560px) {
+      .imgButton {
+        margin-left: 6px;
+        margin-right: 6px;
+      }
+    }
+
+    @media only screen and (max-width: 560px) {
+      #chatInput:focus {
+        width: 180px;
+      }
+    }
+
+    @media only screen and (max-width: 440px) {
+      #menu {
+        height: 38px;
+        padding-top: 3px;
+        padding-bottom: 0px;
+      }
+
+      .compactchat {
+        bottom: 41px;
+      }
+
+      #menu .horizontalSeparator {
+        width: 1px;
+        height: 28px;
+        background-size: 1px 28px;
+        margin-top: 4px;
+        margin-left: 3px;
+        margin-right: 3px;
+      }
+
+      .imgButton {
+        width: 28px;
+        height: 28px;
+        background-size: 28px;
+        margin-top: 4px;
+        margin-left: 2px;
+        margin-right: 2px;
+      }
+
+      .imgSmallButton {
+        /* Used with imgButton class */
+        width: 18px;
+        height: 18px;
+        background-size: 18px;
+        margin-top: 8px;
+        font-size: 10px;
+      }
+
+      #chatInput_parent {
+        bottom: 40px;
+      }
+
+      .buttonBadge {
+        top: -7px;
+        left: 9px;
+        width: 9px;
+        height: 9px;
+        font-size: 9px;
+      }
+
+      .smallButtonBadge {
+        /* Used with buttonBadge class */
+        top: -7px;
+        left: 4px;
+        width: 9px;
+        height: 9px;
+        font-size: 9px;
+      }
+
+      .popInModal {
+        padding: 3px 10px 3px;
+      }
+
+      .modalTextInput {
+        height: 18px;
+        font-size: 16px;
+      }
+
+      #chatInput:focus {
+        width: 130px;
+      }
+
+      #filter_messages:focus {
+        width: 100px;
+      }
+
+      #output {
+        margin-bottom: calc(41px / var(--scale-output));
+        /* Same as menu height + menu padding-top + menu padding-bottom */
+      }
+    }
+
+    @media only screen and (min-width: 393px) {
+      .imgButton {
+        margin-left: 4px;
+        margin-right: 4px;
+      }
+    }
+
+    @media only screen and (max-width: 340px) {
+      #menu {
+        height: 34px;
+        padding-top: 2px;
+        padding-bottom: 0px;
+      }
+
+      .compactchat {
+        bottom: 36px;
+      }
+
+      #menu .horizontalSeparator {
+        width: 1px;
+        height: 24px;
+        background-size: 1px 24px;
+        margin-top: 4px;
+        margin-left: 2px;
+        margin-right: 2px;
+      }
+
+      .imgButton {
+        width: 24px;
+        height: 24px;
+        background-size: 24px;
+        margin-top: 4px;
+        margin-left: 0px;
+        margin-right: 0px;
+      }
+
+      .imgSmallButton {
+        /* Used with imgButton class */
+        width: 16px;
+        height: 16px;
+        background-size: 16px;
+        margin-top: 8px;
+        font-size: 8px;
+      }
+
+      #chatInput_parent {
+        bottom: 36px;
+      }
+
+      .buttonBadge {
+        top: -6px;
+        left: 8px;
+        width: 8px;
+        height: 8px;
+        font-size: 8px;
+      }
+
+      .smallButtonBadge {
+        /* Used with buttonBadge class */
+        top: -6px;
+        left: 4px;
+        width: 8px;
+        height: 8px;
+        font-size: 8px;
+      }
+
+      .popInModal {
+        padding: 2px 6px 2px;
+      }
+
+      .modalTextInput {
+        height: 16px;
+        font-size: 14px;
+      }
+
+      #chatInput:focus {
+        width: 110px;
+      }
+
+      #filter_messages:focus {
+        width: 76px;
+      }
+
+      #output {
+        margin-bottom: calc(36px / var(--scale-output));
+        /* Same as menu height + menu padding-top + menu padding-bottom */
+      }
+    }
+
+    @media only screen and (max-width: 255px) {
+      #menu {
+        height: 30px;
+        padding-top: 1px;
+        padding-bottom: 0px;
+      }
+
+      .compactchat {
+        bottom: 31px;
+      }
+
+      #menu .horizontalSeparator {
+        width: 1px;
+        height: 20px;
+        background-size: 1px 20px;
+        margin-top: 4px;
+        margin-left: 1px;
+        margin-right: 1px;
+      }
+
+      .imgButton {
+        width: 20px;
+        height: 20px;
+        background-size: 20px;
+        margin-top: 4px;
+        margin-left: 0px;
+        margin-right: 0px;
+      }
+
+      .imgSmallButton {
+        /* Used with imgButton class */
+        width: 14px;
+        height: 14px;
+        background-size: 14px;
+        margin-top: 7px;
+        font-size: 7px;
+      }
+
+      #chatInput_parent {
+        bottom: 25px;
+      }
+
+      .buttonBadge {
+        top: -6px;
+        left: 6px;
+        width: 7px;
+        height: 7px;
+        font-size: 7px;
+      }
+
+      .smallButtonBadge {
+        /* Used with buttonBadge class */
+        top: -6px;
+        left: 3px;
+        width: 7px;
+        height: 7px;
+        font-size: 7px;
+      }
+
+      .popInModal {
+        padding: 1px 2px 1px;
+      }
+
+      .modalTextInput {
+        height: 14px;
+        font-size: 12px;
+      }
+
+      #chatInput:focus {
+        width: 100px;
+      }
+
+      #filter_messages:focus {
+        width: 70px;
+      }
+
+      #output {
+        margin-bottom: calc(31px / var(--scale-output));
+        /* Same as menu height + menu padding-top + menu padding-bottom */
+      }
+    }
+
+    @media only screen and (max-width: 220px) {
+      #menu {
+        height: 26px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+      }
+
+      .compactchat {
+        bottom: 26px;
+      }
+
+      #menu .horizontalSeparator {
+        width: 0px;
+        height: 16px;
+        background-size: 0px 16px;
+        margin-top: 5px;
+        margin-left: 0px;
+        margin-right: 0px;
+        display: none !important;
+      }
+
+      .imgButton {
+        width: 16px;
+        height: 16px;
+        background-size: 16px;
+        margin-top: 5px;
+        margin-left: 0px;
+        margin-right: 0px;
+      }
+
+      .imgSmallButton {
+        /* Used with imgButton class */
+        width: 12px;
+        height: 12px;
+        background-size: 12px;
+        margin-top: 7px;
+        font-size: 5px;
+      }
+
+      .buttonBadge {
+        top: -5px;
+        left: 4px;
+        width: 7px;
+        height: 7px;
+        font-size: 7px;
+      }
+
+      .smallButtonBadge {
+        /* Used with buttonBadge class */
+        top: -6px;
+        left: 2px;
+        width: 7px;
+        height: 7px;
+        font-size: 7px;
+      }
+
+      .popInModal {
+        padding: 0px 0px 0px;
+      }
+
+      .modalTextInput {
+        height: 12px;
+        font-size: 10px;
+      }
+
+      #chatInput:focus {
+        width: 72px;
+      }
+
+      #filter_messages:focus {
+        width: 48px;
+      }
+
+      #output {
+        margin-bottom: calc(26px / var(--scale-output));
+        /* Same as menu height + menu padding-top + menu padding-bottom */
+      }
+    }
+
+    .last-message:not(.horizontal) {
+      border: 3px white solid;
+    }
+
+    .last-message2:not(.horizontal) {
+      background-color: var(--pressed-color) !important;
+    }
+
+    .pressed {
+      background-color: var(--pressed-color) !important;
+    }
+
+    .queued {
+      background-color: #99a8cc !important;
+    }
+
+    #pinned .queued {
+      background-color: var(--pinned-queued-bg) !important;
+    }
+
+    .icon {
+      margin: 4px 2px auto 1px;
+      border-radius: 50%;
+    }
+
+    .twoLines .icon {
+      margin: 2px 2px auto 1px;
+    }
+
+    .invert {
+      filter: invert(1);
+    }
+
+    #jumpto {
+      position: fixed !important;
+      bottom: min(14px, 3%);
+      right: min(14px, 3%);
+      margin-top: 0;
+      margin-right: 0;
+    }
+
+    .hidden {
+      display: none !important;
+      opacity: 0 !important;
+      width: 0 !important;
+      height: 0 !important;
+      visibility: hidden !important;
+    }
+
+    #pinned {
+      position: sticky;
+      top: 0 !important;
+      background-color: var(--pinned-bg) !important;
+      left: 0;
+      width: 100%;
+      border-bottom: solid 2px #fff;
+      z-index: 1;
+      zoom: var(--scale-output);
+      overflow-y: auto;
+      overflow-x: hidden;
+      resize: vertical;
+    }
+
+    #pinned:empty {
+      display: none;
+    }
+
+    span.emoji {
+      font-size: var(--stylized-emoji);
+      top: -1px;
+      position: relative;
+      vertical-align: sub;
+      text-shadow: 0 0 #0000;
+    }
+
+    .alignbottom {
+      bottom: 0;
+      position: absolute;
+      right: 0px;
+      overflow-y: auto;
+      max-height: 100%;
+      overflow-x: hidden;
+    }
+
+    @keyframes fade {
+      0% {
+        opacity: 0;
+      }
+
+      5% {
+        opacity: 1;
+      }
+
+      95% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    .fadeout {
+      animation: fadeout 1s;
+      webkit-transition: opacity 0.5s ease-in-out;
+      transition: opacity 0.5 ease-in-out;
+      opacity: 0;
+    }
+
+    @keyframes fadeout {
+      0% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    .fadein {
+      animation: fadein 1s;
+      webkit-transition: opacity 0.5s ease-in-out;
+      transition: opacity 0.5 ease-in-out;
+      opacity: 1;
+    }
+
+
+
+    @keyframes fadein {
+      0% {
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .swiperight {
+      animation: swiperight 1s;
+    }
+
+    @keyframes swiperight {
+      0% {
+        transform: translateX(-100vw);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .swipeleft {
+      animation: swipeleft 1s;
+    }
+
+    @keyframes swipeleft {
+      0% {
+        transform: translateX(100vw);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .swipeup {
+      animation: swipeup 1s;
+    }
+
+    @keyframes swipeup {
+      0% {
+        transform: translateY(-100vh);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    .fadeout.swipeup {
+      animation: fadeout 1s, swipeup 1s;
+    }
+
+    .fadein.swipeup {
+      animation: fadein 2s, swipeup 1s;
+    }
+
+    .fadeout.fadein {
+      animation: fadeout 1s, fadein 1s;
+    }
+
+    .swipeleft.fadein {
+      animation: swipeleft 1s, fadein 1s;
+    }
+
+    .swipeleft.fadeout {
+      animation: fadeout 1s, swipeleft 1s;
+    }
+
+    .swiperight.fadein {
+      animation: swiperight 1s, fadein 1s;
+    }
+
+    .swiperight.fadeout {
+      animation: swiperight 1s, fadeout 1s;
+    }
+
+    .swipeup.fadeout {
+      animation: fadeout 1s, swipeup 1s;
+    }
+
+    .swipeleft.fadein.fadeout {
+      animation: swipeleft 1s, fadein 1s, fadeout 1s;
+    }
+
+    .swipeup.fadein.fadeout {
+      animation: swipeup 1s, fadein 1s, fadeout 1s;
+    }
+
+    .swiperight.fadein.fadeout {
+      animation: swiperight 1s, fadein 1s, fadeout 1s;
+    }
+
+    .electronDraggable {
+      -webkit-app-region: var(--electron-drag-fix);
+    }
+
+    .context-menu {
+      display: none;
+      position: fixed;
+      z-index: 10 !important;
+      padding: 12px 0 !important;
+      width: 240px !important;
+      background-color: #fff !important;
+      border: solid 1px #dfdfdf !important;
+      box-shadow: 1px 1px 2px #cfcfcf !important;
+    }
+
+    .context-menu--active {
+      display: block !important;
+    }
+
+    .context-menu__items {
+      list-style: none !important;
+      margin: 0;
+      padding: 0;
+    }
+
+    .context-menu__item {
+      display: block;
+      margin-bottom: 4px !important;
+      text-shadow: 0 0 black;
+      cursor: pointer;
+    }
+
+    .context-menu__item:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    .context-menu__link {
+      display: block;
+      padding: 4px 12px;
+      color: #0066aa;
+      text-decoration: none;
+    }
+
+    .context-menu__item:hover>* {
+      color: #fff !important;
+    }
+
+    .context-menu__item:hover {
+      color: #fff !important;
+      background-color: #0066aa !important;
+    }
+
+    .context-menu__tip {
+      margin-left: 15px;
+      color: #777;
+      margin-top: 10px;
+      padding-top: 10px;
+      position: relative;
+      top: 7px;
+    }
+
+    .hideMenuKeepScrollLock {
+      height: 0 !important;
+      border: 0 !important;
+      box-shadow: unset !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .hideMenuKeepScrollLock>* {
+      display: none !important;
+    }
+
+    .hideMenuKeepScrollLock>#jumpto {
+      display: block !important;
+    }
+
+    .avatar-badge {
+      width: 30% !important;
+      height: 30% !important;
+      position: relative;
+      float: right;
+      bottom: 20px;
+      right: -5px;
+    }
+
+    img.zero-width-friendly+.zero-width-span {
+      display: inline-block;
+      width: 0;
+      position: absolute;
+    }
+
+    img.zero-width-friendly+.zero-width-span img.zero-width-emote {
+      right: 0;
+      position: absolute;
+    }
+
+    span.zero-width-parent {
+      display: inline-block;
+      width: 0;
+      position: absolute;
+    }
+
+    span.zero-width-parent img.zero-width-emote {
+      position: absolute;
+      right: 0;
+    }
+
+    .alignright .compactmode {
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+    .horizontal .hl-message {
+      min-height: 24px;
+    }
+
+    .alignright .horizontal .hl-donation {
+      padding-right: 11px;
+    }
+
+    .alignright .horizontal {
+      direction: ltr;
+    }
+
+    .horizontal .hl-leftside:empty {
+      display: none;
+    }
+
+    .horizontal .hl-content {
+      align-content: center;
+    }
+
+    .alignright .compactmode .hl-message {
+      flex-direction: var(--flex-direction);
+      display: flex;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .alignright .highlight-chat .hl-firstline {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #meta {
+      background-color: #0000;
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 999;
+      border: 3px solid white;
+      padding: 2px 5px;
+      cursor: pointer;
+    }
+
+    #meta:empty {
+      display: none;
+    }
+
+    .emote-container {
+      display: inline-grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr;
+      vertical-align: top;
+      justify-items: center;
+      /* Center horizontally */
+      align-items: center;
+      /* Center vertically */
+    }
+
+    .emote-container .regular-emote,
+    .emote-container .zero-width-emote-centered,
+    .emote-container .zero-width-emote {
+      grid-column: 1;
+      grid-row: 1;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .emote-container .zero-width-emote-centered,
+    .emote-container .zero-width-emote {
+      z-index: 1;
+    }
+
+    .regular-emote,
+    .zero-width-emote,
+    .zero-width-emote-centered {
+      vertical-align: top;
+    }
+  </style>
+</head>
+
+<body id="main" class="vanilla notcompactmode OBS" style="overflow: hidden;"><svg aria-hidden="true"
+    style="position: absolute; width: 0px; height: 0px; overflow: hidden;">
+    <symbol id="social-stream-person" viewBox="0 0 1024 1024">
+      <path
+        d="M565.2 521.9c76.2-23 132.1-97.6 132.1-186.2 0-106.9-81.3-193.5-181.6-193.5s-181.6 86.6-181.6 193.5c0 87.6 54.6 161.6 129.5 185.4-142.2 23.1-250.8 146.5-250.8 295.3 0 2.9 0 5.8 0.1 8.7 0.9 31.5 26.5 56.7 58.1 56.7h482.1c31.2 0 57-24.6 58-55.8 0.1-3.2 0.2-6.4 0.2-9.6-0.1-147.1-106.2-269.4-246.1-294.5z"
+        fill="#282828"></path>
+    </symbol>
+    <symbol id="social-stream-youtube" viewBox="0 0 1152 1024">
+      <path
+        d="M1099.31 248.166c-12.562-47.3-49.574-84.552-96.568-97.194C917.562 128 576 128 576 128S234.44 128 149.258 150.972c-46.994 12.644-84.006 49.894-96.568 97.194-22.824 85.734-22.824 264.61-22.824 264.61s0 178.876 22.824 264.61c12.562 47.3 49.574 83 96.568 95.642C234.44 896 576 896 576 896s341.56 0 426.742-22.972c46.994-12.642 84.006-48.342 96.568-95.642 22.824-85.734 22.824-264.61 22.824-264.61s0-178.876-22.824-264.61z m-635.02 427.016V350.37l285.478 162.41-285.478 162.402z">
+      </path>
+    </symbol>
+    <symbol id="social-stream-tiktok" viewBox="0 0 1024 1024">
+      <path
+        d="M960 419.82a420.12 420.12 0 0 1-245.54-78.5v357.44A325.1 325.1 0 1 1 434 376.62v179.78a149.24 149.24 0 1 0 104.46 142.36V0h176a242.36 242.36 0 0 0 3.72 44.34A244.36 244.36 0 0 0 826 204.78a242.86 242.86 0 0 0 134 40.28z">
+      </path>
+    </symbol>
+    <symbol id="social-stream-facebook1" viewBox="0 0 1024 1024">
+      <path
+        d="M750.592 335.510588l-18.612706 176.489412H590.908235V1024H379.000471V512H273.408V335.510588h105.592471V229.255529C379.000471 85.714824 438.693647 0 608.376471 0h141.010823v176.489412h-88.244706c-65.837176 0-70.234353 24.877176-70.234353 70.836706V335.510588h159.683765z">
+      </path>
+    </symbol>
+    <symbol id="social-stream-question-mark" viewBox="0 0 1024 1024">
+      <path
+        d="M851.40113 172.58058594c-187.44778688-187.42677-491.37002531-187.44778688-678.83882906 0-187.42677 187.44778688-187.40575313 491.37002531 0 678.81781125 187.46880375 187.44778688 491.39104125 187.44778688 678.83882906 0 187.46880375-187.44778688 187.42677-491.37002531 0-678.81781125zM492.12095094 788.93681844c-36.35886 0-61.07447812-26.73321937-61.07447813-62.44056188 0-36.35886 25.40916844-62.46157875 61.07447813-62.46157875 37.07342719 0 61.07447812 26.08170281 61.74701156 62.46157875 0 35.66530969-24.69460125 62.44056188-61.74701156 62.44056188z m90.83409937-294.96913125c-27.74202 30.81045562-39.00696187 60.12872719-38.25036093 93.902535a45.48009938 45.48009938 0 0 1-45.45908344 45.43806656h-9.70970719a45.39603281 45.39603281 0 0 1-45.41704969-44.78655l-0.10508343-6.6622875c-2.248785-38.31341156 10.52935781-77.36240625 44.3241825-117.92460281 24.06410063-28.56167063 43.54656469-52.58373844 43.54656562-78.14002407 0-26.27085281-17.27571281-43.56758156-54.79049063-45.10179937-11.53815844 0-24.16918406 1.95455156-36.37987593 5.38027031a42.53776406 42.53776406 0 0 1-52.16340469-28.26743719l-0.12610031-0.42033375a42.51674812 42.51674812 0 0 1 27.19558594-53.02508812 277.73545219 277.73545219 0 0 1 87.00906374-13.80796031c99.19873875 0 144.25850531 54.83252344 144.25850532 117.18901875-0.02101688 57.10232531-35.35005938 94.65913594-63.93274688 126.2261925z"
+        fill="#515151"></path>
+    </symbol>
+    <symbol id="social-stream-socialtwitch" viewBox="0 0 1024 1024">
+      <path
+        d="M136.53333333 34.13333333l-68.26666666 170.66666667 0 648.53333333 204.8 0 0 136.53333334 136.53333333 0 136.53333333-136.53333334 170.66666667 0 238.93333333-238.93333333L955.73333333 34.13333333 136.53333333 34.13333333zM512 546.13333333l-102.4 0L409.6 270.93333333l102.4 0L512 546.13333333zM750.93333333 546.13333333l-102.4 0L648.53333333 270.93333333l102.4 0L750.93333333 546.13333333z">
+      </path>
+    </symbol>
+    <symbol id="social-stream-Twitch" viewBox="0 0 1024 1024">
+      <path
+        d="M734.378667 890.197333H534.357333L400.896 1024H267.093333v-133.802667H22.357333V178.176L89.258667 0h912.384v623.274667l-267.264 266.922666z m178.176-311.296V89.088H178.005333v645.461333h200.362667v133.461334l133.461333-133.461334h244.736l155.989334-155.648z"
+        fill="#65459B"></path>
+      <path
+        d="M667.818667 267.264v267.264h89.088V267.264h-89.088z m-244.736 266.922667h89.088V267.264h-89.088v266.922667z"
+        fill="#65459B"></path>
+    </symbol>
+    <symbol id="social-stream-twitch" viewBox="0 0 1024 1024">
+      <path
+        d="M144.2 64L84 217.8v628.6h214V960h120.4l113.6-113.6h174l234-234V64H144.2z m715.6 508.2L726 706H512l-113.6 113.6V706H217.8V144.2h642v428zM726 298v233.8h-80.2V298H726z m-214 0v233.8h-80.2V298H512z"
+        fill=""></path>
+    </symbol>
+  </svg>
+  <div id="meta" class="hidden"></div>
+  <div id="pinned" class="output"></div>
+  <div id="output" class="output" style="margin-bottom: 0px; overflow: hidden;"></div>
+  <div id="menu" class="electronDraggable darkmode" style="display: none;">
+
+    <button class="imgButton" id="pause" data-state="0" onclick="pause();"
+      style="background-image: url(./icons/main_msg_pause.png)" title="Main — ⏸ Pause incoming chat messages"></button>
+    <button class="imgButton" id="say_hello" data-state="0" style="background-image: url(./icons/main_msg_send.png)"
+      title="Main — 💬 Send a text message to social endpoint. (Hold ALT to pop out)"></button>
+    <button class="imgButton imgSmallButton" id="notify" data-state="0" onclick="notify();"
+      style="background-image: url(./icons/main_msg_notify_off.png)"
+      title="Main — 🔔 Start beeping when there is a new message"></button>
+    <button class="imgButton imgSmallButton hidden" id="select_save_file" data-state="0"
+      onclick="overwriteFile('setup');" style="border-radius:0;background-image: url(./icons/main_msg_save.png)"
+      title="Main — 💾 Select the file you want to save the most recent message to"></button>
+    <div class="horizontalSeparator"></div>
+
+    <button class="imgButton" id="filter" data-state="0" style="background-image: url(./icons/filter_msg.png)"
+      title="Filter — 🔽 Filter messages based on what you have entered"></button>
+    <button class="imgButton imgSmallButton" id="hide_emoji" data-state="0" onclick="emoji();"
+      style="background-image: url(./icons/filter_hideemojionly_on.png)"
+      title="Filter — 😀🚫 Hide messages that contains emojis only"></button>
+    <button class="imgButton imgSmallButton" id="only_donos" data-state="0" onclick="donos();"
+      style="background-image: url(./icons/filter_showpaidonly_off.png)"
+      title="Filter — 💲 Filter for messages that have donations/cheer"></button>
+    <button class="imgButton imgSmallButton" id="only_members" data-state="0" onclick="members();"
+      style="background-image: url(./icons/filter_showmembers_off.png)"
+      title="Filter — 👑 Filter for messages that are from members"></button>
+    <div class="horizontalSeparator"></div>
+
+    <div id="queueSection" class="hidden">
+      <button class="imgButton" id="next_in_queue" data-state="0" onclick="nextInQueue(event);"
+        style="background-image: url(./icons/queue_show_next.png)"
+        title="Queue — ⏭ Feature next message in queue (select messages holding CTRL for add them to the queue)"><span
+          id="next_in_queue_badge" class="buttonBadge">0</span></button>
+      <button class="imgButton imgSmallButton" id="show_only_queue" data-state="0" onclick="filterQueued();"
+        style="background-image: url(./icons/queue_show_listonly_off.png)"
+        title="Queue — 📑 Show only the messages in queue"></button>
+      <div class="horizontalSeparator"></div>
+    </div>
+
+    <button class="imgButton" id="clear_overlay" data-state="0"
+      onclick="this.classList.remove('brush');setTimeout(function(ele){ele.classList.add('brush');},0,this);sendDataP2P(false);"
+      style="background-image: url(./icons/featured_clear.png)"
+      title="Featured — 🧹🌟 Clear the featured message (not this chat)"></button>
+    <button class="imgButton" id="autoshow" data-state="0" onclick="autoShow();"
+      style="background-image: url(./icons/featured_auto_stop.png)"
+      title="Featured — 🌟 Auto-feature messages as they come in"></button>
+    <div class="horizontalSeparator"></div>
+
+    <div class="volume-container">
+      <input type="range" id="volumeSlider" min="0" max="100" value="100" class="volume-slider"
+        oninput="volume = this.value/100;">
+      <button class="imgButton imgSmallButton" id="tts" data-state="0" onclick="tts();"
+        style="background-image: url(./icons/tts_incoming_messages_off.png)"
+        title="Text-to-speech — 🔊 Start reading incoming messages out-loud with text-to-speech"></button>
+    </div>
+
+    <button class="imgButton imgSmallButton" id="jumpto" data-state="0" onclick="jumptoBottom();"
+      style="background-image: url(./icons/scroll_to_bottom_off.png)" title="Scroll to bottom"></button>
+  </div>
+  <audio id="testtone" style="display: none" preload="metadata">
+    <source src="./audio/tone.mp3" type="audio/mpeg">
+    <source src="./audio/tone.ogg" type="audio/ogg">
+  </audio>
+  <nav id="context-menu" class="context-menu">
+    <div class="closeBtn">X</div>
+    <ul class="context-menu__items">
+      <li class="context-menu__item" data-action="Delete"
+        title="Enable &amp;sync mode to have messages be deleted in other synced docks also">
+        <a href="#" class="context-menu__link" data-action="Delete">
+          <i class="las la-external-link"></i>
+          <span>Delete Message</span>
+        </a>
+      </li>
+      <li class="context-menu__item" data-action="Block"
+        title="All messages from user will be deleted; user will also get added to the hide-user list">
+        <a href="#" class="context-menu__link" data-action="Block">
+          <i class="las la-external-link"></i>
+          <span>Block User</span>
+        </a>
+      </li>
+      <li class="context-menu__item" data-action="History" title="Previous 10 messages from the user will be displayed">
+        <a href="#" class="context-menu__link" data-action="History">
+          <i class="las la-external-link"></i>
+          <span>See User History</span>
+        </a>
+      </li>
+      <li class="context-menu__item" data-action="Queue">
+        <a href="#" class="context-menu__link" data-action="Queue">
+          <i class="las la-paperclip"></i>
+          <span>Toggle Queue</span>
+        </a>
+      </li>
+      <li class="context-menu__item" data-action="Pin">
+        <a href="#" class="context-menu__link" data-action="Pin">
+          <i class="las la-pen"></i>
+          <span>Toggle Pin</span>
+        </a>
+      </li>
+      <li class="context-menu__item" data-action="TTS">
+        <a href="#" class="context-menu__link" data-action="TTS">
+          <i class="las la-pen"></i>
+          <span>Text to Speech</span>
+        </a>
+      </li>
+      <li class="context-menu__item" data-action="Copy">
+        <a href="#" class="context-menu__link" data-action="Copy">
+          <i class="las la-copy"></i>
+          <span>Copy Text</span>
+        </a>
+      </li>
+      <li class="context-menu__item" data-action="Reply" title="Reply to this user; message goes to their tab only">
+        <a href="#" class="context-menu__link" data-action="Reply">
+          <i class="las la-external-link"></i>
+          <span>Reply to User</span>
+        </a>
+      </li>
+      <li class="hidden" id="TipRightClick">
+        <hr>
+        <span href="#">
+          <small><i data-translate="hold-ctrl">tip: <b>CTRL</b>(⌘) + <b>Click</b> for alt-menu</i></small>
+        </span>
+      </li>
+    </ul>
+  </nav>
+  <div id="obsControlModal" class="hidden">
+    <div class="modal-content">
+      <h2>OBS Remote Control</h2>
+      <div class="modal-section" id="obsScenes">
+        <h3>Scenes</h3>
+        <div id="sceneButtons">
+          <button class="active">Player1</button>
+          <button>Player2</button>
+        </div>
+      </div>
+      <div class="modal-section" id="obsControls">
+        <h3>Controls</h3>
+        <button id="streamingButton">Start Streaming</button>
+        <button id="recordingButton">Start Recording</button>
+      </div>
+      <div class="modal-section" id="obsStatus">
+        <h3>Status</h3>
+        <p>Current Scene: <span id="currentScene">Player1</span></p>
+        <p>Streaming: <span id="streamingStatus">Inactive</span></p>
+        <p>Recording: <span id="recordingStatus">Inactive</span></p>
+      </div>
+      <button id="closeModal" class="close-btn">Close</button>
+    </div>
+  </div>
+  <div id="chatInput_parent" class="popInModal hidden">
+    <input id="chatInput" class="modalTextInput" type="text" placeholder="Send message...">
+    <button id="chatInputButton" class="imgButton imgSmallButton"
+      style="background-image: url(./icons/send_confirm.png)" title="💬 Send this message"></button>
+    <button id="chatClearButton" class="imgButton imgSmallButton" style="background-image: url(./icons/clear.png)"
+      title="🧹 Clear this message"></button>
+    <button id="getChatSources" class="imgButton imgSmallButton"
+      title="Change destination to send messages to. Default is all.">🌐</button>
+    <button id="chatInputLockButton" class="imgButton imgSmallButton" title="🔐 Keep this chat cpen">🔓</button>
+    <button id="chatInputCloseButton" class="imgButton imgSmallButton"
+      style="margin-right: 0;background-image: url(./icons/close.png)" title="❌ Close this dialog"></button>
+  </div>
+  <div id="filter_messages_parent" class="popInModal hidden" style="top: unset; bottom: 5px;">
+    <input id="filter_messages" class="modalTextInput" type="text" placeholder="Filter..."
+      onchange="filterMessages(this.value);">
+    <button id="filterAddNameAndTimeButton" class="imgButton imgSmallButton" data-state="0"
+      onclick="onClickFilterAddNameAndTimeButton(this);"
+      style="background-image: url(./icons/filter_addnametime_off.png)"
+      title="🆔 Include name and time when filtering"></button>
+    <button id="filterClearButton" class="imgButton imgSmallButton" style="background-image: url(./icons/clear.png)"
+      title="🧹 Clear this filter"></button>
+    <button id="filterCloseButton" class="imgButton imgSmallButton" style="background-image: url(./icons/close.png)"
+      title="❌ Close this dialog"></button>
+  </div>
+  <script src="//at.alicdn.com/t/c/font_3902496_i3ql4vplojg.js"
+    data-namespace="//at.alicdn.com/t/c/font_3902496_i3ql4vplojg.js"></script>
+</body>
+
+</html>
